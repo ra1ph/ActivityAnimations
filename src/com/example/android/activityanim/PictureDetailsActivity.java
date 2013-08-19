@@ -28,6 +28,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.*;
+import com.example.android.activityanim.widget.ImagePagerAdapter;
 import com.example.android.activityanim.widget.PagerAdapter;
 import com.example.android.activityanim.widget.TouchImageView;
 import com.example.android.activityanim.widget.ViewPager;
@@ -194,7 +195,7 @@ public class PictureDetailsActivity extends Activity {
 
         pager = (CustomPager) findViewById(R.id.pager);
         pager.setVisibility(View.GONE);
-        adapter = new ImagePagerAdapter(Constants.IMAGES,pager);
+        adapter = new ImagePagerAdapter(this,Constants.IMAGES,pager,mImageView);
         pager.setAdapter(adapter);
         pager.setCurrentItem(pagerPosition);
         pager.setPagingEnabled(false);
@@ -370,122 +371,5 @@ public class PictureDetailsActivity extends Activity {
     }
 
 
-    public class ImagePagerAdapter extends PagerAdapter {
 
-        private String[] images;
-        private LayoutInflater inflater;
-        private View mCurrentView;
-        private CustomPager pager;
-
-        ImagePagerAdapter(String[] images,CustomPager pager) {
-            this.images = images;
-            inflater = getLayoutInflater();
-            this.pager = pager;
-        }
-
-        @Override
-        public void destroyItem(View container, int position, Object object) {
-            ((ViewPager) container).removeView((View) object);
-        }
-
-        @Override
-        public void finishUpdate(View container) {
-        }
-
-        @Override
-        public int getCount() {
-            return images.length;
-        }
-
-
-        @Override
-        public Object instantiateItem(View view, int position) {
-
-            View imageLayout = inflater.inflate(R.layout.item_pager_image, (ViewGroup) view, false);
-            TouchImageView imageView = (TouchImageView) imageLayout.findViewById(R.id.image);
-            final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
-            imageView.setPager(pager);
-
-            imageLoader.displayImage(images[position], imageView, options, new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
-                    //spinner.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                    String message = null;
-                    switch (failReason.getType()) {
-                        case IO_ERROR:
-                            message = "Input/Output error";
-                            break;
-                        case DECODING_ERROR:
-                            message = "Image can't be decoded";
-                            break;
-                        case NETWORK_DENIED:
-                            message = "Downloads are denied";
-                            break;
-                        case OUT_OF_MEMORY:
-                            message = "Out Of Memory error";
-                            break;
-                        case UNKNOWN:
-                            message = "Unknown error";
-                            break;
-                    }
-                    Toast.makeText(PictureDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
-
-                    spinner.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    spinner.setVisibility(View.GONE);
-                    mImageView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //To change body of implemented methods use File | Settings | File Templates.
-                            mImageView.setVisibility(View.INVISIBLE);
-                            mImageView.invalidate();
-                            mImageView.setAlpha(0);
-                            pager.setPagingEnabled(true);
-                        }
-                    }, 500);
-
-
-                }
-            });
-
-            ((ViewPager) view).addView(imageLayout, 0);
-            return imageLayout;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view.equals(object);
-        }
-
-        @Override
-        public void restoreState(Parcelable state, ClassLoader loader) {
-        }
-
-        @Override
-        public Parcelable saveState() {
-            return null;
-        }
-
-        @Override
-        public void startUpdate(View container) {
-        }
-
-
-        @Override
-        public void setPrimaryItem(View container, int position, Object object) {
-            super.setPrimaryItem(container, position, object);    //To change body of overridden methods use File | Settings | File Templates.
-            mCurrentView = (View)object;
-        }
-
-        public View getCurrentView() {
-            return mCurrentView;
-        }
-    }
 }

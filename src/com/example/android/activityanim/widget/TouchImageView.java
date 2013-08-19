@@ -131,9 +131,9 @@ public class TouchImageView extends ImageView {
                         matrix.postTranslate(deltaX, deltaY);
                         last.set(curr.x, curr.y);
 
-                        if (pager != null) {
+                        /*if (pager != null) {
                             pager.requestDisallowInterceptTouchEvent(!outOfBounds);
-                        }
+                        } */
 
 
                     }
@@ -262,11 +262,12 @@ public class TouchImageView extends ImageView {
         setImageMatrix(matrix);
     }
 
-    public boolean isInBounds(){
+    public boolean isInBounds(float dx){
         float x = m[Matrix.MTRANS_X];
-        float y = m[Matrix.MTRANS_Y];
 
-        if ((Math.abs(x) < CURRENCY) || (Math.abs(x + right)) < CURRENCY) {
+        if ((Math.abs(x)<CURRENCY)&&(dx>0)){
+            return false;
+        }else if((Math.abs(x + right) < CURRENCY)&&(dx<0)) {
             return false;
         }else return true;
     }
