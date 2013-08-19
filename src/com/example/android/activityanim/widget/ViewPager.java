@@ -1041,6 +1041,7 @@ public class ViewPager extends ViewGroup {
                     }
 
                     final int pointerIndex = MotionEventCompat.findPointerIndex(ev, activePointerId);
+                    if(pointerIndex!=0)return false;
                     final float x = MotionEventCompat.getX(ev, pointerIndex);
                     final float dx = x - mLastMotionX;
                     final float xDiff = Math.abs(dx);

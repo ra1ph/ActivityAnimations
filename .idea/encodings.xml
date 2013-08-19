@@ -10,7 +10,6 @@
     <file url="file://$PROJECT_DIR$/res/layout/ac_image_pager.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/res/layout/item_grid_image.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/res/layout/item_pager_image.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/com/example/android/activityanim/ImagePagerActivity.java" charset="UTF-8" />
   </component>
 </project>
 
